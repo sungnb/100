@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#18324a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>136번 개인구역</title>
+
+<style>
+:root{
+  --bg:#0f1115;
+  --panel:#1b1f27;
+  --panel2:#20252e;
+  --line:#303641;
+  --text:#f2f4f7;
+  --muted:#aeb5c0;
+  --blue:#18324a;
+  --accent:#3374a9;
+  --scale:1;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#252a38 0%,#171a21 40%,#0f1115 78%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+  font-size:calc(15px * var(--scale));
+  padding-bottom:24px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  width:100%;
+  z-index:1000;
+  background:#18324a !important;
+  border-bottom:1px solid #18324a;
+  box-shadow:0 5px 22px rgba(0,0,0,.35);
+}
+
+.header-inner{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.title-area{
+  flex:1;
+  min-width:0;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  padding:0;
+  font-size:35px;
+  font-weight:800;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  text-align:center;
+  color:#fff;
+}
+
+.home-btn,
+.settings{
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:12px;
+  background:#234563;
+  color:#f7f7f7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .2s, transform .15s;
+}
+
+.home-btn:active,
+.settings:active{
+  transform:scale(.94);
+  background:#234563;
+  color:#f7f7f7;
+}
+
+/* =========================
+   SETTINGS PANEL
+========================= */
+
+.panel{
+  display:none;
+  position:absolute;
+  top:58px;
+  right:10px;
+  width:235px;
+  padding:12px;
+  z-index:200;
+  background:#20242d;
+  border:1px solid #3a404b;
+  border-radius:16px;
+  box-shadow:0 14px 35px rgba(0,0,0,.55);
+  text-align:center;
+}
+
+.panel.show{
+  display:block;
+}
+
+.theme-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.theme-btn{
+  height:42px;
+  border:1px solid #363c47;
+  border-radius:11px;
+  background:#171b22;
+  color:#e9edf2;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.theme-btn.active{
+  border-color:#8d7cf5;
+  background:linear-gradient(135deg,#302b50,#24213b);
+  color:#fff;
+}
+
+.font-row{
+  display:grid;
+  grid-template-columns:52px 1fr 52px;
+  align-items:center;
+  gap:8px;
+}
+
+.font-btn{
+  width:52px;
+  height:42px;
+  border:1px solid #363c47;
+  border-radius:11px;
+  background:#171b22;
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.font-size{
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #363c47;
+  border-radius:11px;
+  background:#171b22;
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+}
+
+main{
+  width:min(900px,calc(100% - 16px));
+  margin:76px auto 30px;
+}
+
+.sheet-head{
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:3px;
+  margin-bottom:3px;
+}
+
+.tile{
+  padding:10px 7px;
+  text-align:center;
+  font-weight:900;
+  border-radius:2px;
+}
+
+.numtile{
+  background:#c9dcfa;
+  color:#111;
+  font-size:25px;
+  text-decoration:underline;
+}
+
+.zonetile{
+  background:#c9dcfa;
+  color:#111;
+  font-size:19px;
+}
+
+.daytile{
+  background:#d9ead3;
+  color:#111;
+}
+
+.owner{
+  background:#fce5cd;
+  color:#111;
+}
+
+.countline{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:#93c47d;
+  color:#111;
+  font-weight:900;
+  text-align:center;
+  padding:6px;
+}
+
+.assignments{
+  width:100%;
+  border-collapse:collapse;
+  background:#d9e7e8;
+  color:#111;
+  margin-bottom:8px;
+  font-weight:800;
+}
+
+.assignments th,
+.assignments td{
+  border:1.5px solid #111;
+  padding:6px 5px;
+  text-align:center;
+}
+
+.assignments th{
+  background:#c8dfe2;
+}
+
+.assignments input,
+.assignments select{
+  width:100%;
+  min-width:0;
+  border:0;
+  border-bottom:1px solid #9aa;
+  background:transparent;
+  color:#111;
+  font:inherit;
+  font-weight:800;
+  text-align:center;
+  padding:5px 1px;
+}
+
+.assignments input[type=date]{
+  font-size:13px;
+}
+
+.map{
+  width:100%;
+  display:block;
+  border:2px solid #111;
+  background:#ddd;
+  max-height:520px;
+  object-fit:contain;
+}
+
+.section-title{
+  display:grid;
+  grid-template-columns:2fr repeat(3,.7fr) 1fr;
+  background:#6fa8dc;
+  color:white;
+  font-weight:900;
+  text-align:center;
+  margin-top:8px;
+}
+
+.section-title div{
+  padding:6px 2px;
+  border-right:1px solid #fff;
+}
+
+.address-list{
+  border-collapse:collapse;
+  width:100%;
+  table-layout:fixed;
+  background:#20252e;
+}
+
+.address-list th,
+.address-list td{
+  border:1px solid #59616c;
+  padding:7px 5px;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+
+.address-list th{
+  background:#382078;
+  color:#fff;
+}
+
+.address-list td:first-child{
+  text-align:left;
+  width:42%;
+}
+
+.address-list input{
+  width:100%;
+  min-width:0;
+  background:#14181e;
+  color:var(--text);
+  border:1px solid #414957;
+  border-radius:5px;
+  padding:7px 4px;
+  font:inherit;
+}
+
+.address-list input[type=checkbox]{
+  width:21px;
+  height:21px;
+  accent-color:#3374a9;
+}
+
+.maplinks{
+  display:flex;
+  gap:8px;
+  justify-content:space-between;
+  margin:8px 0;
+}
+
+.maplinks a{
+  flex:1;
+  text-align:center;
+  padding:9px 5px;
+  border-radius:8px;
+  background:#234563;
+  color:white;
+  text-decoration:none;
+  font-weight:900;
+}
+
+.toolbar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:12px 0;
+}
+
+.toolbar button{
+  border:0;
+  border-radius:8px;
+  padding:10px 13px;
+  background:#3374a9;
+  color:#fff;
+  font-weight:900;
+  font-size:14px;
+}
+
+.toolbar button:disabled{
+  opacity:.5;
+}
+
+.status{
+  font-size:13px;
+  color:#ffd98a;
+  min-height:20px;
+  margin:8px 2px;
+  line-height:1.5;
+}
+
+body.light{
+  --bg:#f3f4f7;
+  --panel:#fff;
+  --panel2:#f7f8fa;
+  --line:#dfe2e7;
+  --text:#20242b;
+  --muted:#69717d;
+  background:#f3f4f7;
+  color:var(--text);
+}
+
+body.light .address-list{
+  background:#fff;
+  color:#20242b;
+}
+
+body.light .address-list input{
+  background:#f6f7f9;
+  color:#20242b;
+}
+
+@media(max-width:520px){
+
+  /* 휴대폰 전체 화면 고정 */
+  html,
+  body{
+    width:100%;
+    height:100%;
+    height:100dvh;
+    overflow:hidden;
+    overscroll-behavior:none;
+  }
+
+   body{
+    padding-bottom:0;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    width:100%;
+    overflow:hidden;
+  }
+
+  /* 상단 머리말 고정 */
+  header{
+    position:fixed !important;
+    top:0 !important;
+    left:0;
+    right:0;
+    width:100%;
+    z-index:10000;
+    transform:none !important;
+  }
+
+  .header-inner{
+    padding:10px 7px;
+    gap:10px;
+  }
+
+  header h1{
+    font-size:35px;
+  }
+
+  .home-btn,
+  .settings{
+    flex:0 0 42px;
+    width:42px;
+    height:42px;
+  }
+
+  /* 본문만 스크롤 */
+   main{
+    position:fixed;
+    top:62px;
+    bottom:0;
+    left:0;
+    right:0;
+
+    width:calc(100% - 12px);
+    margin:0 auto;
+
+      overflow-x:hidden;
+    overflow-y:auto;
+
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:none;
+    touch-action:pan-y;
+    padding-bottom:30px;
+  }
+
+  .assignments th,
+  .assignments td{
+    padding:5px 2px;
+    font-size:13px;
+  }
+
+  .address-list th,
+  .address-list td{
+    padding:5px 2px;
+    font-size:12px;
+  }
+
+  .address-list input{
+    font-size:12px;
+    padding:6px 2px;
+  }
+
+}
+</style>  
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <button
+      class="home-btn"
+      onclick="history.back()"
+      aria-label="뒤로가기">
+      ‹
+    </button>
+
+    <div class="title-area">
+      <h1>136번 개인구역</h1>
+    </div>
+
+    <button
+      class="settings"
+      onclick="toggle()"
+      aria-label="설정">
+      ⚙
+    </button>
+
+    <div id="panel" class="panel">
+
+      <div class="theme-row">
+
+        <button
+          id="lightBtn"
+          class="theme-btn"
+          onclick="theme('light')">
+          ☀ 밝게
+        </button>
+
+        <button
+          id="darkBtn"
+          class="theme-btn"
+          onclick="theme('dark')">
+          🌙 어둡게
+        </button>
+
+      </div>
+
+      <div class="font-row">
+
+        <button
+          class="font-btn"
+          onclick="changeFont(-10)"
+          aria-label="글자 작게">
+          −
+        </button>
+
+        <div id="fontSize" class="font-size">
+          100%
+        </div>
+
+        <button
+          class="font-btn"
+          onclick="changeFont(10)"
+          aria-label="글자 크게">
+          ＋
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<main>
+
+  <section class="sheet-head">
+
+    <div class="tile numtile" id="cardNumber">
+      136
+    </div>
+
+    <div class="tile zonetile" id="zoneName">
+      개인구역
+    </div>
+
+    <div class="tile daytile" id="weekday">
+      개인봉사
+    </div>
+
+    <div class="tile owner" id="owner">
+      담당자
+    </div>
+
+  </section>
+
+  <div class="countline">
+    <span>호수 · <b id="houseCount">0</b></span>
+    <span>완료 일자 · <b id="completeDate">—</b></span>
+  </div>
+
+
+  <table class="assignments" aria-label="차수별 날짜 및 담당자">
+    <tbody id="assignmentRows"></tbody>
+  </table>
+
+
+  <img
+    id="mapImage"
+    class="map"
+    alt="136번 개인구역 지도"
+    style="display:none"
+  >
+
+
+  <div class="section-title">
+    <div>주 소</div>
+    <div>1차</div>
+    <div>2차</div>
+    <div>3차</div>
+    <div>비고</div>
+  </div>
+
+
+  <div class="maplinks">
+
+    <a
+      id="kakaoTop"
+      href="#"
+      target="_blank"
+      rel="noopener"
+    >
+      카카오맵
+    </a>
+
+    <a
+      id="naverTop"
+      href="#"
+      target="_blank"
+      rel="noopener"
+    >
+      네이버 지도
+    </a>
+
+  </div>
+
+
+  <table class="address-list">
+
+    <thead>
+      <tr>
+        <th style="width:42%">주소</th>
+        <th>1차</th>
+        <th>2차</th>
+        <th>3차</th>
+        <th style="width:16%">비고</th>
+      </tr>
+    </thead>
+
+    <tbody id="addressRows"></tbody>
+
+  </table>
+
+
+  <div class="toolbar">
+
+    <button onclick="saveData()">
+      변경사항 저장
+    </button>
+
+  </div>
+
+
+  <div class="status" id="status">
+    136번 시트 연결을 준비하고 있습니다.
+  </div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   1. 연결 설정
+========================================================= */
+
+const CONFIG = {
+
+  spreadsheetId:
+    "1zfMZhKyUjqcGLcCrxk7TBpXktbMjmTR68JveiyZOtpM",
+
+  sheetGid:
+    "77788459",
+
+  apiUrl:
+    "https://script.google.com/macros/s/AKfycbz9x4zRTg2jGlNA6AKqjo5UdJlgaXMmd0GFmpBSYXgzN8aJMaKVAQx7VMswH0AqbdSDcg/exec"
+
+};
+
+
+let nameOptions = [];
+
+let changedCells = new Map();
+
+let jsonpCounter = 0;
+
+
+/* =========================================================
+   2. HTML 문자 처리
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    c => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
+
+}
+
+
+/* =========================================================
+   3. 상태 표시
+========================================================= */
+
+function setStatus(message,isError=false){
+
+  const el =
+    document.getElementById("status");
+
+  el.textContent =
+    message;
+
+  el.style.color =
+    isError ? "#ff9b9b" : "#ffd98a";
+
+}
+
+
+/* =========================================================
+   4. Apps Script JSONP 통신
+========================================================= */
+
+function jsonp(params){
+
+  return new Promise((resolve,reject)=>{
+
+    const callbackName =
+      "callback136_" +
+      Date.now() +
+      "_" +
+      (++jsonpCounter);
+
+    const script =
+      document.createElement("script");
+
+    const query =
+      new URLSearchParams({
+        ...params,
+        callback:callbackName,
+        t:Date.now()
+      });
+
+    const timeout =
+      setTimeout(
+        ()=>finish(
+          new Error("서버 응답 시간이 초과되었습니다.")
+        ),
+        30000
+      );
+
+
+    function finish(error,result){
+
+      clearTimeout(timeout);
+
+      delete window[callbackName];
+
+      script.remove();
+
+      if(error){
+
+        reject(error);
+
+      }else{
+
+        resolve(result);
+
+      }
+
+    }
+
+
+    window[callbackName] =
+      result => finish(null,result);
+
+
+    script.onerror = ()=>finish(
+      new Error(
+        "Apps Script에 연결하지 못했습니다. 배포 주소와 액세스 권한을 확인해 주세요."
+      )
+    );
+
+
+    script.src =
+      CONFIG.apiUrl + "?" + query.toString();
+
+    document.body.appendChild(script);
+
+  });
+
+}
+
+
+/* =========================================================
+   5. 변경 내용 기록
+========================================================= */
+
+function markChanged(element){
+
+  const row =
+    Number(element.dataset.row);
+
+  const col =
+    Number(element.dataset.col);
+
+  let value;
+
+  if(element.type === "checkbox"){
+
+    value =
+      element.checked ? "true" : "false";
+
+  }else{
+
+    value =
+      element.value;
+
+  }
+
+
+  changedCells.set(
+    row + ":" + col,
+    {
+      row:row,
+      col:col,
+      value:value
+    }
+  );
+
+
+  setStatus(
+    "변경된 내용이 있습니다. 변경사항 저장을 눌러주세요."
+  );
+
+}
+
+
+/* =========================================================
+   6. 날짜 및 담당자 표 만들기
+========================================================= */
+
+function makeAssignmentRows(data){
+
+  const body =
+    document.getElementById("assignmentRows");
+
+  let html = "";
+
+
+  for(let i=0;i<9;i++){
+
+    const row =
+      i + 10;
+
+    const group =
+      Math.floor(i / 3) + 1;
+
+    const part =
+      (i % 3) + 1;
+
+    const date =
+      data.dates?.[i] || "";
+
+    const selectedName =
+      data.names?.[i] || "";
+
+
+    const options =
+      [...new Set(
+        [selectedName,...nameOptions].filter(Boolean)
+      )];
+
+
+    html += `
+      <tr>
+
+        ${
+          part === 1
+          ? `<th rowspan="3">${group} 차</th>`
+          : ""
+        }
+
+        <th>${part}회</th>
+
+        <td>
+
+          <input
+            type="date"
+            aria-label="${group}차 ${part}회 날짜"
+            data-row="${row}"
+            data-col="4"
+            value="${escapeHtml(date)}"
+            onchange="markChanged(this)"
+          >
+
+        </td>
+
+        <td>
+
+          <select
+            aria-label="${group}차 ${part}회 담당자"
+            data-row="${row}"
+            data-col="7"
+            onchange="markChanged(this)"
+          >
+
+            <option value="">선택</option>
+
+            ${
+              options.map(n=>`
+                <option
+                  value="${escapeHtml(n)}"
+                  ${n===selectedName?"selected":""}
+                >
+                  ${escapeHtml(n)}
+                </option>
+              `).join("")
+            }
+
+          </select>
+
+        </td>
+
+      </tr>
+    `;
+
+  }
+
+
+  body.innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   7. 주소 및 방문 기록 표 만들기
+========================================================= */
+
+function makeAddressRows(records){
+
+  const body =
+    document.getElementById("addressRows");
+
+
+  body.innerHTML =
+    (records || []).map(record=>{
+
+      const row =
+        Number(record.row);
+
+      const address =
+        record.address || "";
+
+      const first =
+        record.first === true ||
+        String(record.first).toUpperCase() === "TRUE";
+
+      const second =
+        record.second === true ||
+        String(record.second).toUpperCase() === "TRUE";
+
+      const third =
+        record.third === true ||
+        String(record.third).toUpperCase() === "TRUE";
+
+
+      return `
+
+        <tr>
+
+          <td>
+
+            <input
+              class="address"
+              aria-label="${row}행 주소"
+              data-row="${row}"
+              data-col="2"
+              value="${escapeHtml(address)}"
+              oninput="markChanged(this);updateMapLinks(this)"
+            >
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="checkbox"
+              aria-label="${row}행 1차 방문"
+              data-row="${row}"
+              data-col="3"
+              ${first?"checked":""}
+              onchange="markChanged(this)"
+            >
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="checkbox"
+              aria-label="${row}행 2차 방문"
+              data-row="${row}"
+              data-col="4"
+              ${second?"checked":""}
+              onchange="markChanged(this)"
+            >
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="checkbox"
+              aria-label="${row}행 3차 방문"
+              data-row="${row}"
+              data-col="5"
+              ${third?"checked":""}
+              onchange="markChanged(this)"
+            >
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="text"
+              aria-label="${row}행 비고"
+              data-row="${row}"
+              data-col="6"
+              value="${escapeHtml(record.note || "")}"
+              onchange="markChanged(this)"
+            >
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+
+  const firstAddress =
+    body.querySelector("input.address");
+
+  if(firstAddress){
+
+    updateMapLinks(firstAddress);
+
+  }
+
+}
+
+
+/* =========================================================
+   8. 지도 검색 링크
+========================================================= */
+
+function updateMapLinks(input){
+
+  const address =
+    input.value.trim();
+
+  const clean =
+    address.replace(/[()]/g,"");
+
+
+  document.getElementById("kakaoTop").href =
+    address
+      ? "https://map.kakao.com/link/search/" +
+        encodeURIComponent(clean)
+      : "#";
+
+
+  document.getElementById("naverTop").href =
+    address
+      ? "https://m.map.naver.com/search2/search.nhn?query=" +
+        encodeURIComponent(address) +
+        "sm=hty#/MAP"
+      : "#";
+
+}
+
+
+/* =========================================================
+   9. 서버에서 받은 데이터 화면에 표시
+========================================================= */
+
+function applyData(data){
+
+  document.getElementById("cardNumber").textContent =
+    "136";
+
+
+  document.getElementById("zoneName").textContent =
+    data.connectionInfo ||
+    data.mapTitle ||
+    "개인구역";
+
+
+  document.getElementById("weekday").textContent =
+    data.subtitle ||
+    "개인봉사";
+
+
+  document.getElementById("owner").textContent =
+    "담당자";
+
+
+  document.getElementById("houseCount").textContent =
+    data.addressCount || "0";
+
+
+  document.getElementById("completeDate").textContent =
+    "—";
+
+
+  nameOptions =
+    Array.isArray(data.nameOptions)
+      ? data.nameOptions
+      : [];
+
+
+  makeAssignmentRows(data);
+
+
+  makeAddressRows(data.records || []);
+
+
+  if(data.mapImage){
+
+    const map =
+      document.getElementById("mapImage");
+
+    map.src =
+      data.mapImage;
+
+    map.style.display =
+      "block";
+
+  }
+
+
+  setStatus(
+    "원본 136번 시트의 데이터를 불러왔습니다."
+  );
+
+}
+
+
+/* =========================================================
+   10. 데이터 불러오기
+========================================================= */
+
+async function loadData(){
+
+  setStatus(
+    "136번 시트 데이터를 불러오는 중입니다..."
+  );
+
+
+  try{
+
+    const result =
+      await jsonp({
+        action:"getData"
+      });
+
+
+    if(
+      !result ||
+      result.success !== true
+    ){
+
+      throw new Error(
+        result?.message ||
+        "시트 데이터를 가져오지 못했습니다."
+      );
+
+    }
+
+
+    applyData(result);
+
+
+  }catch(error){
+
+    setStatus(
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   11. 변경사항 원본 시트에 저장
+========================================================= */
+
+async function saveData(){
+
+  if(changedCells.size === 0){
+
+    setStatus(
+      "저장할 변경사항이 없습니다."
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.querySelector(
+      ".toolbar button[onclick='saveData()']"
+    );
+
+  if(button){
+
+    button.disabled = true;
+
+  }
+
+
+  const items =
+    [...changedCells.values()];
+
+  let saved = 0;
+
+
+  try{
+
+    for(const item of items){
+
+      const result =
+        await jsonp({
+
+          action:"save",
+
+          row:String(item.row),
+
+          col:String(item.col),
+
+          value:String(item.value)
+
+        });
+
+
+      if(
+        !result ||
+        result.success !== true
+      ){
+
+        throw new Error(
+          result?.message ||
+          `${item.row}행 저장 실패`
+        );
+
+      }
+
+
+      changedCells.delete(
+        item.row + ":" + item.col
+      );
+
+
+      saved++;
+
+
+      setStatus(
+        `저장 중입니다... ${saved}/${items.length}`
+      );
+
+    }
+
+
+    setStatus(
+      `${saved}개 항목을 원본 136번 시트에 저장했습니다.`
+    );
+
+
+  }catch(error){
+
+    setStatus(
+      `${error.message} (저장 완료 ${saved}개, 남은 변경 ${changedCells.size}개)`,
+      true
+    );
+
+  }finally{
+
+    if(button){
+
+      button.disabled = false;
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   12. 화면 설정
+========================================================= */
+
+function toggle(){
+
+  document.getElementById("panel")
+    .classList.toggle("show");
+
+}
+
+
+/* 밝기 설정 */
+
+function theme(mode){
+
+  const isLight = mode === "light";
+
+  document.body.classList.toggle(
+    "light",
+    isLight
+  );
+
+  localStorage.setItem(
+    "personalTheme",
+    isLight ? "light" : "dark"
+  );
+
+  document.getElementById("lightBtn")
+    .classList.toggle("active", isLight);
+
+  document.getElementById("darkBtn")
+    .classList.toggle("active", !isLight);
+
+  document.documentElement.style.colorScheme =
+    isLight ? "light" : "dark";
+
+}
+
+
+/* 글자 크기 설정 */
+
+let fontPercent = 100;
+
+function setFontPercent(percent){
+
+  fontPercent = Math.max(
+    80,
+    Math.min(150, percent)
+  );
+
+  const scale =
+    1.2 * (fontPercent / 100);
+
+  document.documentElement.style.setProperty(
+    "--scale",
+    scale
+  );
+
+  document.getElementById("fontSize")
+    .textContent = fontPercent + "%";
+
+  localStorage.setItem(
+    "personalFont",
+    String(fontPercent)
+  );
+
+}
+
+
+function changeFont(amount){
+
+  setFontPercent(
+    fontPercent + amount
+  );
+
+}
+
+
+/* 저장된 설정 불러오기 */
+
+(function(){
+
+  const savedTheme =
+    localStorage.getItem("personalTheme");
+
+  const savedFont =
+    Number(localStorage.getItem("personalFont"));
+
+  theme(
+    savedTheme === "light" ? "light" : "dark"
+  );
+
+  if(Number.isFinite(savedFont) && savedFont){
+
+    setFontPercent(savedFont);
+
+  }else{
+
+    setFontPercent(100);
+
+  }
+
+})();
+
+/* =========================================================
+   13. 웹페이지 시작
+========================================================= */
+
+// 본문 상단·하단의 당김 방지
+(function(){
+
+  const main = document.querySelector("main");
+
+  let startY = 0;
+
+  main.addEventListener("touchstart", function(e){
+
+    startY = e.touches[0].clientY;
+
+  }, {passive:true});
+
+  main.addEventListener("touchmove", function(e){
+
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY;
+
+    const atTop = main.scrollTop <= 0;
+
+    const atBottom =
+      main.scrollTop + main.clientHeight >=
+      main.scrollHeight - 1;
+
+    if(
+      (atTop && deltaY > 0) ||
+      (atBottom && deltaY < 0)
+    ){
+      e.preventDefault();
+    }
+
+  }, {passive:false});
+
+})();
+
+loadData();
+
+</script>
+
+</body>
+</html>
